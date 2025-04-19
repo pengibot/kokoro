@@ -9,7 +9,7 @@ Unlike BasicTokenizer:
 - RegexTokenizer handles optional special tokens.
 """
 
-import regex as re
+import re
 from tqdm import tqdm
 from .base import Tokenizer, get_stats, merge
 
