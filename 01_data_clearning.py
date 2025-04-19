@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -55,5 +56,9 @@ for file in data_directory.glob('*.srt'):
 text_sequence = ""
 for file_name in all_chats.keys():
     text_sequence += " ".join(all_chats[file_name][0])
+
+os.makedirs("output", exist_ok=True)
+with open("output/combined_text.txt", "w", encoding="utf-8") as f:
+    f.write(text_sequence)
 
 print(len(text_sequence))
