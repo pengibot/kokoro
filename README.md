@@ -1,2 +1,0 @@
-# kokoro
-Japanese LLM
