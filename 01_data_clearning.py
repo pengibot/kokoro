@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 import pandas as pd
 import re
@@ -19,6 +20,7 @@ def read_chat(file_path: Path) -> pd.DataFrame:
     symbol_pattern_audio = r'♬'
     symbol_pattern_audio_single = r'♪'
     symbol_pattern_tv = r'📺'
+    symbol_pattern_camers = r'📻'
     tips_message = r'TIPS: ko-fi.com/jpsubs'
     dotted_message = r'…'
     symbol_arrow = r'➡'
@@ -68,6 +70,7 @@ def read_chat(file_path: Path) -> pd.DataFrame:
             line = re.sub(symbol_pattern_audio, '', line)
             line = re.sub(symbol_pattern_audio_single, '', line)
             line = re.sub(symbol_pattern_tv, '', line)
+            line = re.sub(symbol_pattern_camers, '', line)
             line = re.sub(symbol_pattern, '', line)
             line = re.sub(r'[^\S\r\n]+', '', line)
             line = re.sub(r'[a-zA-Z0-9]', '', line)

@@ -19,23 +19,32 @@ class BasicTokenizer(Tokenizer):
         super().__init__()
 
     def train(self, text, vocab_size, verbose=False):
-        assert vocab_size >= 256
-        num_merges = vocab_size - 256
 
-        # input text preprocessing
-        text_bytes = text.encode("utf-8")  # raw bytes
-        ids = list(text_bytes)  # list of integers in range 0..255
+        # Work with character-level tokens initially (can later shift to multibyte if needed)
+        chars = list(text)
+        unique_chars = sorted(set(chars))
+        char_to_id = {ch: i for i, ch in enumerate(unique_chars)}
+        id_to_char = {i: ch for ch, i in char_to_id.items()}
 
-        # iteratively merge the most common pairs to create new tokens
+        # convert characters to initial ids
+        ids = [char_to_id[ch] for ch in chars]
+
+        # start your vocab from characters
+        vocab = {i: id_to_char[i].encode("utf-8") for i in id_to_char}
+        start_idx = len(vocab)  # e.g. 2282 for your file
+
+
+        assert vocab_size >= start_idx
+        num_merges = vocab_size - start_idx
         merges = {}  # (int, int) -> int
-        vocab = {idx: bytes([idx]) for idx in range(256)}  # int -> bytes
+
         for i in tqdm(range(num_merges), total=num_merges):
             # count up the number of times every consecutive pair appears
             stats = get_stats(ids)
             # find the pair with the highest count
             pair = max(stats, key=stats.get)
             # mint a new token: assign it the next available id
-            idx = 256 + i
+            idx = start_idx + i
             # replace all occurrences of pair in ids with idx
             ids = merge(ids, pair, idx)
             # save the merge

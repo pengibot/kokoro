@@ -90,14 +90,18 @@ class Tokenizer:
         # Tokenizer can decode a list of integers into a string
         raise NotImplementedError
 
+    def get_idx(self):
+        return 10000
+
     def _build_vocab(self):
         # vocab is simply and deterministically derived from merges
-        vocab = {idx: bytes([idx]) for idx in range(256)}
+        vocab = {idx: str([idx]) for idx in range(self.get_idx())}
         for (p0, p1), idx in self.merges.items():
             vocab[idx] = vocab[p0] + vocab[p1]
         for special, idx in self.special_tokens.items():
             vocab[idx] = special.encode("utf-8")
         return vocab
+
 
     def save(self, file_prefix):
         """
@@ -148,7 +152,7 @@ class Tokenizer:
         # read the model file
         merges = {}
         special_tokens = {}
-        idx = 256
+        idx = self.get_idx()
         with open(model_file, 'r', encoding="utf-8") as f:
             # read the version
             version = f.readline().strip()

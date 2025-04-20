@@ -1,8 +1,8 @@
-import json
 import os
 import pickle
 import sys
 sys.path.append('..')
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 from minbpe import BasicTokenizer
 
@@ -11,9 +11,8 @@ def train_tokenizer():
         text_sequence = f.readline()
 
     tokenizer = BasicTokenizer()
-    tokenizer.train(text_sequence, vocab_size=1024)
+    tokenizer.train(text_sequence, vocab_size=10000)
 
-    vocab = tokenizer.vocab
     with open('output/tokenizer.pkl', 'wb') as f:
         pickle.dump(tokenizer, f)
 
@@ -23,7 +22,7 @@ def load_tokenizer():
         return pickle.load(f)
 
 # Testing methods work
-# train_tokenizer()
+train_tokenizer()
 tokenizer = load_tokenizer()
 
 # Printing out some of the tokens to check it worked
