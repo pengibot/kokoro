@@ -1,5 +1,5 @@
 # kokoro
-Japanese LLM
+Japanese Large Language Model (LLM)
 
 Got subtitles from https://kitsunekko.net/subtitles/japanese/
 
